@@ -57,16 +57,16 @@ object $stage$ extends Stage {
      * be read from. The resourceURI function uploads the resource in the JAR
      * to a known location in S3 and return the URI to it.
      */
-    val simpleSpark = resourceURI("simpleSparkJob.py")
-    val simpleScript = resourceURI("simpleScript.sh")
+    val sampleSpark = resourceURI("sampleSparkJob.py")
+    val sampleScript = resourceURI("sampleScript.sh")
 
     // we used the phenotype to process as the output
     val phenotype = output
 
     // list of steps to execute for this job
     Seq(
-      JobStep.PySpark(simpleSpark, phenotype),
-      JobStep.Script(simpleScript, phenotype)
+      JobStep.PySpark(sampleSpark, phenotype),
+      JobStep.Script(sampleScript, phenotype)
     )
   }
 }
