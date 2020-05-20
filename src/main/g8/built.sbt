@@ -61,7 +61,8 @@ buildInfoTask := {
 
   // output the version information from git to versionInfo.properties
   IO.write(file, contents)
-
-  // add the file to the jar
   Seq(file)
 }
+
+// add the build info task output to resources
+(resourceGenerators in Compile) += buildInfoTask.taskValue

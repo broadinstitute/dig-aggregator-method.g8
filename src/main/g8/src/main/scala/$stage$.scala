@@ -15,11 +15,11 @@ object $stage$ extends Stage {
   /** Whenever one of these dependencies is added to S3 or updated,
     * this stage will run.
     */
-  override val dependencies: Seq[Stage.Input] = Seq(
+  override val dependencies: Seq[Run.Input.Source] = Seq(
     // example dataset source
-    Stage.Input.Dataset("variants/"),
+    Run.Input.Source.Dataset("variants/"),
     // example method output source
-    Stage.Input.Success("out/metaanalysis/trans-ethnic/")
+    Run.Input.Source.Success("out/metaanalysis/trans-ethnic/")
   )
 
   /** For every dependency that is new/updated, this function is called

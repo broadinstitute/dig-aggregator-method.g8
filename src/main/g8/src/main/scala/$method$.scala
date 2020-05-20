@@ -6,22 +6,30 @@ import org.broadinstitute.dig.aws.emr._
 
 /** This is the entry point for your method.
   *
-  * The main() function is already written for you. All that
-  * needs to be done here is to add each of the stages for
-  * your method in the order they should be executed.
+  * All that needs to be done here is to add stages to the
+  * method and define the provenance information.
   *
   * When you are ready to run it, use SBT from the CLI:
   *
-  * sbt run org.broadinstitute.org.aggregator.methods.$method$
+  *   $ sbt run
   *
-  * This will output the stages that need to be executed due to
-  * new or updated dependencies.
-  *
-  * If you provide --yes on the command line, the stage(s) will
-  * actually run. Providing --test will redirect any outputs to
-  * a test location assuming the Spark jobs/scripts are written
-  * to understand it.
+  * See the README in dig-aggregator-core for a complete
+  * list of CLI arguments.
   */
 object $method$ extends Method {
-  addStage($stage$)
+
+  /** Every method needs provenance. This is recorded for every
+    * run so that it is possible to go back and see the exact
+    * code used to generate the output.
+    */
+  override val provenance: Provenance = {
+    Provenance.fromResource("versionInfo.properties").get
+  }
+
+  /** Add all stages used in this method here. Stages must be
+    *  added in the order they should be executed.
+    */
+  override def initStages(): Unit = {
+    addStage($stage$)
+  }
 }
