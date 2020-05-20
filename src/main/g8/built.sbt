@@ -39,6 +39,9 @@ val buildInfoTask = taskKey[Seq[File]]("buildInfo")
 
 // define execution code for task
 buildInfoTask := {
+  val file = (resourceManaged in Compile).value / "versionInfo.properties"
+
+  // log where the properties will be written to
   streams.value.log.info(s"Writing version info to \$file...")
 
   // collect git versioning information
@@ -48,8 +51,6 @@ buildInfoTask := {
   val anyUncommittedChanges = git.gitUncommittedChanges.value
   val remoteUrl = (scmInfo in ThisBuild).value.map(_.browseUrl.toString)
   val buildDate = java.time.Instant.now
-
-  val file = (resourceManaged in Compile).value / "versionInfo.properties"
 
   // build properties content
   val contents =
