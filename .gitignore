@@ -1,0 +1,25 @@
+# metals language server files
+.metals/
+.bloop/
+
+# vscode and intellij
+.vscode/
+.idea/
+
+# eclipse
+bin/
+.classpath
+.project
+.settings
+.cache-main
+.cache-tests
+
+# compiled project
+project/.bloop/
+project/project/
+project/target/
+target/
+out/
+
+# log files
+*.log
