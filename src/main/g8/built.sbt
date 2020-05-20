@@ -39,7 +39,7 @@ val buildInfoTask = taskKey[Seq[File]]("buildInfo")
 
 // define execution code for task
 buildInfoTask := {
-  streams.value.log.info(s"Writing version info to \\$file...")
+  streams.value.log.info(s"Writing version info to \$file...")
 
   // collect git versioning information
   val branch = git.gitCurrentBranch.value
@@ -53,11 +53,11 @@ buildInfoTask := {
 
   // build properties content
   val contents =
-    s"""|branch=\\${branch}
-        |lastCommit=\\${lastCommit.getOrElse("")}
-        |uncommittedChanges=\\${anyUncommittedChanges}
-        |buildDate=\\${buildDate}
-        |remoteUrl=\\${remoteUrl.getOrElse("")}
+    s"""|branch=\${branch}
+        |lastCommit=\${lastCommit.getOrElse("")}
+        |uncommittedChanges=\${anyUncommittedChanges}
+        |buildDate=\${buildDate}
+        |remoteUrl=\${remoteUrl.getOrElse("")}
         |""".stripMargin
 
   // output the version information from git to versionInfo.properties
