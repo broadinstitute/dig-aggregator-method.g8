@@ -11,7 +11,7 @@ import org.broadinstitute.dig.aws.emr._
   *
   * When you are ready to run it, use SBT from the CLI:
   *
-  *   $ sbt run
+  *   sbt run
   *
   * See the README in dig-aggregator-core for a complete
   * list of CLI arguments.
