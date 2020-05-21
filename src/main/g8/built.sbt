@@ -52,9 +52,9 @@ buildInfoTask := {
 
   // map properties
   val properties = Map[String, String](
-    "remoteUrl" -> remoteUrl,
     "branch" -> branch,
-    "lastCommit" -> lastCommit,
+    "lastCommit" -> lastCommit.getOrElse(""),
+    "remoteUrl" -> remoteUrl.getOrElse(""),
     "uncommittedChanges" -> anyUncommittedChanges.toString,
     "buildDate" -> buildDate.toString
   )
