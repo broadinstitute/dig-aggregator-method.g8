@@ -54,8 +54,8 @@ buildInfoTask := {
   val properties = Map[String, Option[String]](
     "remoteUrl" -> remoteUrl,
     "lastCommit" -> lastCommit,
-    "branch" -> Option.when(branch.length > 0)(branch),
-    "uncommittedChanges" -> Option.when(anyUncommittedChanges)("true"),
+    "branch" -> (if (branch.length > 0) Some(branch) else None),
+    "uncommittedChanges" -> (if (anyUncommittedChanges) Some("true") else None),
     "buildDate" -> Some(buildDate.toString)
   )
 
