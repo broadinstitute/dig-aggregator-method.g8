@@ -4,12 +4,11 @@
 # Several environment variables are already set for you.
 #
 
-echo "\${S3_BUCKET}"  # e.g. s3://dig-analysis-data
-echo "\${METHOD_NAME}"  # e.g. $method$
-echo "\${STAGE_NAME}"  # e.g. $stage$
-echo "\${SESSION_NAME}"  # e.g. $method$.$stage$
-echo "\${STAGE_OUTPUT}"  # e.g. T2D
-echo "\${OUTPUT_PREFIX}"  # e.g. out/$method$/$stage$
+echo "\${BUCKET}"  # e.g. s3://dig-analysis-data
+echo "\${METHOD}"  # e.g. $method$
+echo "\${STAGE}"  # e.g. $stage$
+echo "\${JOB}"  # e.g. T2D
+echo "\${OUTPUT}"  # e.g. out/$method$/$stage$/T2D
 
 #
 # You can also pass command line arguments to the script from your stage.
