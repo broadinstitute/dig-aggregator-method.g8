@@ -50,17 +50,23 @@ buildInfoTask := {
   val remoteUrl = (scmInfo in ThisBuild).value.map(_.browseUrl.toString)
   val buildDate = java.time.Instant.now
 
+  // map properties
+  val properties = Map[String, Option[String]](
+    "remoteUrl" -> remoteUrl,
+    "branch" -> branch,
+    "lastCommit" -> lastCommit,
+    "uncommittedChanges" -> anyUncommittedChanges,
+    "buildDate" -> Some(buildDate.toString)
+  )
+
   // build properties content
-  val contents =
-    s"""|branch=\${branch}
-        |lastCommit=\${lastCommit.getOrElse("")}
-        |uncommittedChanges=\${anyUncommittedChanges}
-        |buildDate=\${buildDate}
-        |remoteUrl=\${remoteUrl.getOrElse("")}
-        |""".stripMargin
+  val contents = properties.toList.map {
+    case (key, Some(value)) => s"\$key=\$value"
+    case _                  => ""
+  }
 
   // output the version information from git to versionInfo.properties
-  IO.write(file, contents)
+  IO.write(file, contents.mkString("\n"))
   Seq(file)
 }
 
