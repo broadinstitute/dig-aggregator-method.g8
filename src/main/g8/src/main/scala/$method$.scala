@@ -23,7 +23,7 @@ object $method$ extends Method {
     * code used to generate the output.
     */
   override val provenance: Option[Provenance] = {
-    Provenance.fromResource("versionInfo.properties")
+    Provenance.fromResource("version.properties")
   }
 
   /** Add all stages used in this method here. Stages must be

@@ -37,7 +37,7 @@ val buildInfoTask = taskKey[Seq[File]]("buildInfo")
 
 // define execution code for task
 buildInfoTask := {
-  val file = (resourceManaged in Compile).value / "versionInfo.properties"
+  val file = (resourceManaged in Compile).value / "version.properties"
 
   // log where the properties will be written to
   streams.value.log.info(s"Writing version info to \$file...")
