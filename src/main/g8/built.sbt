@@ -51,18 +51,18 @@ buildInfoTask := {
   val buildDate = java.time.Instant.now
 
   // map properties
-  val properties = Map[String, Option[String]](
+  val properties = Map[String, String](
     "remoteUrl" -> remoteUrl,
+    "branch" -> branch,
     "lastCommit" -> lastCommit,
-    "branch" -> (if (branch.length > 0) Some(branch) else None),
-    "uncommittedChanges" -> (if (anyUncommittedChanges) Some("true") else None),
-    "buildDate" -> Some(buildDate.toString)
+    "uncommittedChanges" -> anyUncommittedChanges.toString,
+    "buildDate" -> buildDate.toString
   )
 
   // build properties content
   val contents = properties.toList.map {
-    case (key, Some(value)) => s"\$key=\$value"
-    case _                  => ""
+    case (key, value) if value.length > 0 => s"\$key=\$value"
+    case _                                => ""
   }
 
   // output the version information from git to versionInfo.properties
