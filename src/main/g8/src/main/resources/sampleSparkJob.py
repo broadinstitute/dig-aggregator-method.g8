@@ -6,11 +6,17 @@ from pyspark.sql import SparkSession
 # All these environment variables will be set for you.
 #
 
-s3_bucket = getenv('BUCKET')  # e.g. s3://dig-analysis-data
-method_name = getenv('METHOD')  # e.g. $method$
-stage_name = getenv('STAGE')  # e.g. $stage$
-job_name = getenv('JOB')  # e.g. T2D
-prefix_out = getenv('PREFIX')  # e.g. out/$method$/$stage$/T2D
+bucket = getenv('JOB_BUCKET')  # e.g. s3://dig-analysis-data
+method = getenv('JOB_METHOD')  # e.g. $method$
+stage = getenv('JOB_STAGE')  # e.g. $stage$
+job_name = getenv('JOB_NAME')  # e.g. T2D
+job_prefix = getenv('JOB_PREFIX')  # e.g. out/$method$/$stage$/T2D
+
+print(bucket)
+print(method)
+print(stage)
+print(job_name)
+print(job_prefix)
 
 #
 # Job steps can pass arguments to the scripts.
@@ -23,21 +29,17 @@ opts.add_argument('phenotype')
 # args.phenotype will be set
 args = opts.parse_args()
 
+# should show args.phenotype
+print(args)
+
 #
 # Run the spark job.
 #
 
 # PySpark steps need to create a spark session
-spark = SparkSession.builder.appName(method_name).getOrCreate()
+spark = SparkSession.builder.appName(method).getOrCreate()
 
-# load some input data
-df = spark.read.json(f'{s3_bucket}/variants/*/{args.phenotype}/part-*')
-
-# do some processing to it
-df = df.filter(df.pValue < 5e-8)
-
-# write out the results
-df.write.json(f'{s3_bucket}/{prefix_out}')
+# TODO: spark job here...
 
 # done
 spark.stop()

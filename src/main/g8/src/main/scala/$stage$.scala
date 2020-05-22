@@ -82,7 +82,7 @@ object $stage$ extends Stage {
 
     // list of steps to execute for this job
     Seq(
-      //JobStep.PySpark(sampleSparkJob, phenotype),
+      JobStep.PySpark(sampleSparkJob, phenotype),
       JobStep.Script(sampleScript, phenotype)
     )
   }
