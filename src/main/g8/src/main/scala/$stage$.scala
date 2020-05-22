@@ -15,11 +15,11 @@ object $stage$ extends Stage {
   /** Whenever one of these dependencies is added to S3 or updated,
     * this stage will run.
     */
-  override val dependencies: Seq[Run.Input.Source] = Seq(
+  override val dependencies: Seq[Input.Source] = Seq(
     // example dataset source
-    Run.Input.Source.Dataset("variants/"),
+    Input.Source.Dataset("variants/"),
     // example method output source
-    Run.Input.Source.Success("out/metaanalysis/trans-ethnic/")
+    Input.Source.Success("out/metaanalysis/trans-ethnic/")
   )
 
   /** For every dependency that is new/updated, this function is called
@@ -34,13 +34,13 @@ object $stage$ extends Stage {
     * should be pattern matched with a Glob object to determine which
     * output(s) to return.
     */
-  override def getOutputs(input: Run.Input): Stage.Outputs = {
+  override def getOutputs(input: Input): Outputs = {
     val variants = Glob("variants/*/*/...")
     val metaAnalysis = Glob("out/metaanalysis/trans-ethnic/*/...")
 
     input.key match {
-      case variants(dataset, phenotype) => Stage.Outputs.Set(phenotype)
-      case metaAnalysis(phenotype)      => Stage.Outputs.Set(phenotype)
+      case variants(dataset, phenotype) => Outputs.Seq(phenotype)
+      case metaAnalysis(phenotype)      => Outputs.Seq(phenotype)
     }
   }
 
