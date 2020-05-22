@@ -16,9 +16,6 @@ object $stage$ extends Stage {
     * this stage will run.
     */
   override val dependencies: Seq[Input.Source] = Seq(
-    // example dataset source
-    Input.Source.Dataset("variants/"),
-    // example method output source
     Input.Source.Success("out/metaanalysis/trans-ethnic/")
   )
 
@@ -35,12 +32,10 @@ object $stage$ extends Stage {
     * output(s) to return.
     */
   override def getOutputs(input: Input): Outputs = {
-    val variants = Glob("variants/*/*/...")
     val metaAnalysis = Glob("out/metaanalysis/trans-ethnic/*/...")
 
     input.key match {
-      case variants(dataset, phenotype) => Outputs.Named(phenotype)
-      case metaAnalysis(phenotype)      => Outputs.Named(phenotype)
+      case metaAnalysis(phenotype) => Outputs.Named(phenotype)
     }
   }
 
