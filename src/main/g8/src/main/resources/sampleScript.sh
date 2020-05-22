@@ -4,11 +4,11 @@
 # Several environment variables are already set for you.
 #
 
-echo "\${JOB_BUCKET}"  # e.g. s3://dig-analysis-data
-echo "\${JOB_METHOD}"  # e.g. $method$
-echo "\${JOB_STAGE}"   # e.g. $stage$
-echo "\${JOB_NAME}"    # e.g. T2D
-echo "\${JOB_PREFIX}"  # e.g. out/$method$/$stage$/T2D
+echo "JOB_BUCKET = \${JOB_BUCKET}"  # e.g. s3://dig-analysis-data
+echo "JOB_METHOD = \${JOB_METHOD}"  # e.g. $method$
+echo "JOB_STAGE  = \${JOB_STAGE}"   # e.g. $stage$
+echo "JOB_NAME   = \${JOB_NAME}"    # e.g. T2D
+echo "JOB_PREFIX = \${JOB_PREFIX}"  # e.g. out/$method$/$stage$/T2D
 
 #
 # You can also pass command line arguments to the script from your stage.

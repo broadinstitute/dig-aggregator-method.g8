@@ -12,11 +12,11 @@ stage = getenv('JOB_STAGE')  # e.g. $stage$
 job_name = getenv('JOB_NAME')  # e.g. T2D
 job_prefix = getenv('JOB_PREFIX')  # e.g. out/$method$/$stage$/T2D
 
-print(bucket)
-print(method)
-print(stage)
-print(job_name)
-print(job_prefix)
+print(f'JOB_BUCKET = {bucket}')
+print(f'JOB_METHOD = {method}')
+print(f'JOB_STAGE  = {stage}')
+print(f'JOB_NAME   = {job_name}')
+print(f'JOB_PREFIX = {job_prefix}')
 
 #
 # Job steps can pass arguments to the scripts.
