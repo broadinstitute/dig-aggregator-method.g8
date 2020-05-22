@@ -4,13 +4,35 @@ import org.broadinstitute.dig.aggregator.core._
 import org.broadinstitute.dig.aws._
 import org.broadinstitute.dig.aws.emr._
 
-/** A stage
+/** This is a single stage in your method.
+  *
+  * Stages are one or more output jobs that can be run by your method
+  * that are generally grouped together when they logically can be run
+  * in parallel across multiple, identically configured clusters.
+  *
+  * For example, running METAL is 3 stages:
+  *
+  *   1. Partitioning variants from datasets
+  *   2. Running METAL
+  *   3. Producing plots of the METAL output
+  *
+  * Stages 2 and 3 must obviously be separated as the output of 2 is the
+  * input of 3 (via Input.Source.Success).
+  *
+  * The separation of stages 1 and 2 is more nuanced. Partitioning could
+  * be a single step in the job of running METAL, but it benefits greatly
+  * from having a cluster with multiple nodes to distribute the work, while
+  * METAL is just a single, large-node cluster.
   */
 object $stage$ extends Stage {
 
-  /* Cluster configuration used when running this stage.
-   */
-  override def cluster: ClusterDef = super.cluster
+  /** Cluster configuration used when running this stage. The super
+    * class already has a default configuration defined, so it's easier
+    * to just override parts of it here.
+    */
+  override val cluster: ClusterDef = super.cluster.copy(
+    instances = 1
+  )
 
   /** Whenever one of these dependencies is added to S3 or updated,
     * this stage will run.
@@ -40,8 +62,8 @@ object $stage$ extends Stage {
   }
 
   /** For every output returned by getOutputs, this function is called and
-    * should return a series of job steps that will be run on the cluster
-    * instantiated.
+    * should return a sequence of steps that will be run - in order - on the
+    * instantiated cluster.
     *
     * This is almost always either a PySpark step (spark job) or a Script
     * step (i.e. bash, perl, python, ruby).
@@ -52,7 +74,7 @@ object $stage$ extends Stage {
      * be read from. The resourceURI function uploads the resource in the JAR
      * to a known location in S3 and return the URI to it.
      */
-    val sampleSpark = resourceURI("sampleSparkJob.py")
+    val sampleSparkJob = resourceURI("sampleSparkJob.py")
     val sampleScript = resourceURI("sampleScript.sh")
 
     // we used the phenotype to process as the output
@@ -60,7 +82,7 @@ object $stage$ extends Stage {
 
     // list of steps to execute for this job
     Seq(
-      JobStep.PySpark(sampleSpark, phenotype),
+      //JobStep.PySpark(sampleSparkJob, phenotype),
       JobStep.Script(sampleScript, phenotype)
     )
   }
