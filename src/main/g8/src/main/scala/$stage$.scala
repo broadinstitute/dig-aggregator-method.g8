@@ -39,8 +39,8 @@ object $stage$ extends Stage {
     val metaAnalysis = Glob("out/metaanalysis/trans-ethnic/*/...")
 
     input.key match {
-      case variants(dataset, phenotype) => Outputs.Seq(phenotype)
-      case metaAnalysis(phenotype)      => Outputs.Seq(phenotype)
+      case variants(dataset, phenotype) => Outputs.Named(phenotype)
+      case metaAnalysis(phenotype)      => Outputs.Named(phenotype)
     }
   }
 
