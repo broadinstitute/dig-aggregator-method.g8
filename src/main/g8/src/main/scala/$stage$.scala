@@ -24,7 +24,7 @@ import org.broadinstitute.dig.aws.emr._
   * from having a cluster with multiple nodes to distribute the work, while
   * METAL is just a single, large-node cluster.
   */
-object $stage$ extends Stage {
+class $stage$ extends Stage {
 
   /** Cluster configuration used when running this stage. The super
     * class already has a default configuration defined, so it's easier
@@ -34,50 +34,42 @@ object $stage$ extends Stage {
     instances = 1
   )
 
-  /** Whenever one of these dependencies is added to S3 or updated,
-    * this stage will run.
+  /** Input sources need to be declared so they can be used in rules.
     */
-  override val dependencies: Seq[Input.Source] = Seq(
-    Input.Source.Success("out/metaanalysis/trans-ethnic/")
-  )
+  val metaAnalysis: Source = Source.Success("out/metaanalysis/trans-ethnic/*/")
 
-  /** For every dependency that is new/updated, this function is called
-    * and should return the outputs that need to be built.
-    *
-    * The outputs are just strings that you define for your stage. They
-    * can be anything you like, but should generally not change.
-    *
-    * A single input can return one or more output.
-    *
-    * Each input is an S3 object's key and e-tag (checksum). The key is
-    * should be pattern matched with a Glob object to determine which
-    * output(s) to return.
+  /** When run, all the input sources here will be checked to see if they
+    * are new or updated.
     */
-  override def getOutputs(input: Input): Outputs = {
-    val metaAnalysis = Glob("out/metaanalysis/trans-ethnic/*/...")
+  override val sources: Seq[Source] = Seq(metaAnalysis)
 
-    input.key match {
-      case metaAnalysis(phenotype) => Outputs.Named(phenotype)
-    }
+  /** For every dependency that is new/updated, this partial function is
+    * called, which maps the input sources to the outputs that should be
+    * built.
+    *
+    * Each source can use wildcards to match arbitrary patterns in the input
+    * key. These patterns are extracted in the rules and can be used when
+    * generating the outputs.
+    */
+  override val rules: PartialFunction[Input, Outputs] = {
+    case metaAnalysis(phenotype) => Outputs.Named(phenotype)
   }
 
-  /** For every output returned by getOutputs, this function is called and
-    * should return a sequence of steps that will be run - in order - on the
-    * instantiated cluster.
-    *
-    * This is almost always either a PySpark step (spark job) or a Script
-    * step (i.e. bash, perl, python, ruby).
+  /** Once all the rules have been applied to the new and updated inputs,
+    * each of the outputs needs to be build. This method returns the job
+    * steps that should be performed on the cluster.
     */
-  override def getJob(output: String): Seq[JobStep] = {
+  override def make(output: String): Seq[JobStep] = {
 
     /* All job steps require a URI to a location in S3 where the script can
-     * be read from. The resourceURI function uploads the resource in the JAR
-     * to a known location in S3 and return the URI to it.
+     * be read from by the cluster. The resourceURI function uploads the
+     * resource in the JAR to a unique location in S3 identified by the
+     * method name, stage name, and the path of the resource in the JAR.
      */
     val sampleSparkJob = resourceURI("sampleSparkJob.py")
     val sampleScript = resourceURI("sampleScript.sh")
 
-    // we used the phenotype to process as the output
+    // we used the phenotype as the output in rules
     val phenotype = output
 
     // list of steps to execute for this job

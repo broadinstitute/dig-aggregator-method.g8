@@ -30,6 +30,6 @@ object $method$ extends Method {
     * order they should be executed.
     */
   override def initStages(): Unit = {
-    addStage($stage$)
+    addStage(new $stage$)
   }
 }

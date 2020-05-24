@@ -1,10 +1,6 @@
-val Orgs = new {
-  val DIG = "org.broadinstitute.dig"
-}
-
 val Versions = new {
+  val Aggregator = "0.3.0-SNAPSHOT"
   val Scala = "2.13.2"
-  val DigAggregator = "0.3.0-SNAPSHOT"
 }
 
 // set the version of scala to compile with
@@ -20,7 +16,7 @@ scalacOptions ++= Seq(
 
 // add required libraries
 libraryDependencies ++= Seq(
-  Orgs.DIG %% "dig-aggregator-core" % Versions.DigAggregator
+  "org.broadinstitute.dig" %% "dig-aggregator-core" % Versions.Aggregator
 )
 
 // set the oranization this method belongs to
