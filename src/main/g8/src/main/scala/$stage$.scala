@@ -24,7 +24,7 @@ import org.broadinstitute.dig.aws.emr._
   * from having a cluster with multiple nodes to distribute the work, while
   * METAL is just a single, large-node cluster.
   */
-class $stage$ extends Stage {
+class $stage$(implicit context: Context) extends Stage {
 
   /** Cluster configuration used when running this stage. The super
     * class already has a default configuration defined, so it's easier
@@ -36,12 +36,13 @@ class $stage$ extends Stage {
 
   /** Input sources need to be declared so they can be used in rules.
     */
-  val metaAnalysis: Source = Source.Success("out/metaanalysis/trans-ethnic/*/")
+  val metaAnalysis: Input.Source =
+    Input.Source.Success("out/metaanalysis/trans-ethnic/*/")
 
   /** When run, all the input sources here will be checked to see if they
     * are new or updated.
     */
-  override val sources: Seq[Source] = Seq(metaAnalysis)
+  override val sources: Seq[Input.Source] = Seq(metaAnalysis)
 
   /** For every dependency that is new/updated, this partial function is
     * called, which maps the input sources to the outputs that should be
