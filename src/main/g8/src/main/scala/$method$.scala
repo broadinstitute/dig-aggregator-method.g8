@@ -27,9 +27,9 @@ object $method$ extends Method {
   }
 
   /** Add all stages used in this method here. Stages must be added in the
-    * order they should be executed.
+    * order they should be serially executed.
     */
-  override def initStages(): Unit = {
-    addStage(new $stage$)
+  override def initStages(implicit context: Context) = {
+    addStage(new TestStage)
   }
 }
