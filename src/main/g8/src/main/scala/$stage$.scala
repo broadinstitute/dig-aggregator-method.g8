@@ -67,8 +67,8 @@ class $stage$(implicit context: Context) extends Stage {
      * resource in the JAR to a unique location in S3 identified by the
      * method name, stage name, and the path of the resource in the JAR.
      */
-    val sampleSparkJob = resourceURI("sampleSparkJob.py")
-    val sampleScript = resourceURI("sampleScript.sh")
+    val sampleSparkJob = resourceUri("sampleSparkJob.py")
+    val sampleScript = resourceUri("sampleScript.sh")
 
     // we used the phenotype as the output in rules
     val phenotype = output
