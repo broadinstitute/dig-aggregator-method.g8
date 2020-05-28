@@ -18,18 +18,10 @@ import org.broadinstitute.dig.aws.emr._
   */
 object $method$ extends Method {
 
-  /** Every method needs provenance. This is recorded for every run so it
-    * is possible to go back and see the exact code used to generate the
-    * output.
-    */
-  override val provenance: Option[Provenance] = {
-    Provenance.fromResource("version.properties")
-  }
-
   /** Add all stages used in this method here. Stages must be added in the
     * order they should be serially executed.
     */
   override def initStages(implicit context: Context) = {
-    addStage(new TestStage)
+    addStage(new $stage$)
   }
 }
