@@ -4,68 +4,68 @@ import org.broadinstitute.dig.aggregator.core._
 import org.broadinstitute.dig.aws._
 import org.broadinstitute.dig.aws.emr._
 
-/** This is a single stage in your method.
+/** This is a stage in your method.
   *
-  * Stages are one or more output jobs that can be run by your method
-  * that are generally grouped together when they logically can be run
-  * in parallel across multiple, identically configured clusters.
+  * Stages take one or more inputs and generate one or more outputs. Each
+  * stage consists of a...
   *
-  * For example, running METAL is 3 stages:
+  *   - list of input sources;
+  *   - rules mapping inputs to outputs;
+  *   - make function that returns a job used to produce a given output
   *
-  *   1. Partitioning variants from datasets
-  *   2. Running METAL
-  *   3. Producing plots of the METAL output
+  * Optionally, a stage can also override...
   *
-  * Stages 2 and 3 must obviously be separated as the output of 2 is the
-  * input of 3 (via Input.Source.Success).
-  *
-  * The separation of stages 1 and 2 is more nuanced. Partitioning could
-  * be a single step in the job of running METAL, but it benefits greatly
-  * from having a cluster with multiple nodes to distribute the work, while
-  * METAL is just a single, large-node cluster.
+  *   - its name, which defaults to its class name
+  *   - the cluster definition used to provision EC2 instances
   */
 class $stage$(implicit context: Context) extends Stage {
 
   /** Cluster configuration used when running this stage. The super
     * class already has a default configuration defined, so it's easier
-    * to just override parts of it here.
+    * to just copy and override specific parts of it.
     */
-  override val cluster: ClusterDef = super.cluster.copy(
-    instances = 1
-  )
+  override val cluster: ClusterDef = super.cluster.copy(instances = 1)
 
   /** Input sources need to be declared so they can be used in rules.
+    *
+    * Input sources are a glob-like S3 prefix to an object in S3. Wildcards
+    * can be pattern matched in the rules of the stage.
     */
-  val metaAnalysis: Input.Source =
-    Input.Source.Success("out/metaanalysis/trans-ethnic/*/")
+  val variants: Input.Source = Input.Source.Dataset("variants/*/*/")
 
   /** When run, all the input sources here will be checked to see if they
     * are new or updated.
     */
-  override val sources: Seq[Input.Source] = Seq(metaAnalysis)
+  override val sources: Seq[Input.Source] = Seq(variants)
 
-  /** For every dependency that is new/updated, this partial function is
-    * called, which maps the input sources to the outputs that should be
-    * built.
+  /** For every input that is new/updated, this partial function is called,
+    * which pattern matches it against the inputs sources defined above and
+    * maps them to the output(s) that should be built.
     *
-    * Each source can use wildcards to match arbitrary patterns in the input
-    * key. These patterns are extracted in the rules and can be used when
-    * generating the outputs.
+    * In our variants input source, there are two wildcards in the S3 prefix,
+    * which are matched to the dataset name and phenotype. The dataset is
+    * ignored, and the name of the phenotype is used as the output.
     */
   override val rules: PartialFunction[Input, Outputs] = {
-    case metaAnalysis(phenotype) => Outputs.Named(phenotype)
+    case variants(dataset, phenotype) => Outputs.Named(phenotype)
   }
 
   /** Once all the rules have been applied to the new and updated inputs,
-    * each of the outputs needs to be build. This method returns the job
-    * steps that should be performed on the cluster.
+    * each of the outputs that needs built is send here. A job is returned,
+    * which is the series of steps that need to be executed on the cluster
+    * in order for the final output to be successfully built.
+    *
+    * It is assumed that all outputs for a given stage are independent of
+    * each other and can be executed in parallel across multiple, identical
+    * clusters.
     */
   override def make(output: String): Seq[JobStep] = {
 
     /* All job steps require a URI to a location in S3 where the script can
-     * be read from by the cluster. The resourceURI function uploads the
-     * resource in the JAR to a unique location in S3 identified by the
-     * method name, stage name, and the path of the resource in the JAR.
+     * be read from by the cluster.
+     *
+     * The resourceUri function will upload the resource in the jar to a
+     * unique location in S3 and return the URI to where it was uploaded.
      */
     val sampleSparkJob = resourceUri("sampleSparkJob.py")
     val sampleScript = resourceUri("sampleScript.sh")

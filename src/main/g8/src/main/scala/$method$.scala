@@ -4,17 +4,17 @@ import org.broadinstitute.dig.aggregator.core._
 import org.broadinstitute.dig.aws._
 import org.broadinstitute.dig.aws.emr._
 
-/** This is the entry point for your method.
+/** This is your aggregator method.
   *
-  * All that needs to be done here is to add stages to the method and
-  * define the provenance information.
+  * All that needs to be done here is to implement the initStages function,
+  * which adds stages to the method in the order they should be executed.
   *
   * When you are ready to run it, use SBT from the CLI:
   *
-  *   sbt run
+  *   sbt run [args]
   *
-  * See the README in dig-aggregator-core for a complete list of CLI
-  * arguments.
+  * See the README of the dig-aggregator-core project for a complete list of
+  * CLI arguments available.
   */
 object $method$ extends Method {
 
