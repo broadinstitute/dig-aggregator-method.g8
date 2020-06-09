@@ -24,7 +24,12 @@ class $stage$(implicit context: Context) extends Stage {
     * class already has a default configuration defined, so it's easier
     * to just copy and override specific parts of it.
     */
-  override val cluster: ClusterDef = super.cluster.copy(instances = 1)
+  override val cluster: ClusterDef = super.cluster.copy(
+    instances = 1,
+    bootstrapScripts = Seq(
+      new BootstrapScript(resourceUri("sampleBootstrap.sh"))
+    )
+  )
 
   /** Input sources need to be declared so they can be used in rules.
     *
@@ -68,7 +73,7 @@ class $stage$(implicit context: Context) extends Stage {
      * unique location in S3 and return the URI to where it was uploaded.
      */
     val sampleSparkJob = resourceUri("sampleSparkJob.py")
-    val sampleScript = resourceUri("sampleScript.sh")
+    val sampleScript   = resourceUri("sampleScript.sh")
 
     // we used the phenotype as the output in rules
     val phenotype = output
