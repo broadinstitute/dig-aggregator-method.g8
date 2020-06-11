@@ -3,49 +3,55 @@ from os import getenv
 from platform import python_version
 from pyspark.sql import SparkSession
 
-#
-# Ensure Python3 is being used.
-#
 
-print(f'PYTHON VERSION = {python_version()}')
-print(f'USER           = {getenv("USER")}')
+def main():
+    """
+    Arguments: phenotype
+    """
+    print(f'PYTHON VERSION = {python_version()}')
+    print(f'USER           = {getenv("USER")}')
 
-#
-# All these environment variables will be set for you.
-#
+    #
+    # Job steps can pass arguments to the scripts.
+    #
 
-bucket = getenv('JOB_BUCKET')  # e.g. s3://dig-analysis-data
-method = getenv('JOB_METHOD')  # e.g. Test
-stage = getenv('JOB_STAGE')  # e.g. TestStage
-prefix = getenv('JOB_PREFIX')  # e.g. out/Test/TestStage
+    # build argument
+    opts = ArgumentParser()
+    opts.add_argument('phenotype')
 
-print(f'JOB_BUCKET     = {bucket}')
-print(f'JOB_METHOD     = {method}')
-print(f'JOB_STAGE      = {stage}')
-print(f'JOB_PREFIX     = {prefix}')
+    # args.phenotype will be set
+    args = opts.parse_args()
 
-#
-# Job steps can pass arguments to the scripts.
-#
+    # should show args.phenotype
+    print(args)
 
-# build argument
-opts = ArgumentParser()
-opts.add_argument('phenotype')
+    #
+    # All these environment variables will be set for you.
+    #
 
-# args.phenotype will be set
-args = opts.parse_args()
+    bucket = getenv('JOB_BUCKET')  # e.g. s3://dig-analysis-data
+    method = getenv('JOB_METHOD')  # e.g. Test
+    stage = getenv('JOB_STAGE')  # e.g. TestStage
+    prefix = getenv('JOB_PREFIX')  # e.g. out/Test/TestStage
 
-# should show args.phenotype
-print(args)
+    print(f'JOB_BUCKET     = {bucket}')
+    print(f'JOB_METHOD     = {method}')
+    print(f'JOB_STAGE      = {stage}')
+    print(f'JOB_PREFIX     = {prefix}')
 
-#
-# Run the spark job.
-#
+    #
+    # Run the spark job.
+    #
 
-# PySpark steps need to create a spark session
-spark = SparkSession.builder.appName(method).getOrCreate()
+    # PySpark steps need to create a spark session
+    spark = SparkSession.builder.appName(method).getOrCreate()
 
-# TODO: spark job here...
+    # TODO: spark job here...
 
-# done
-spark.stop()
+    # done
+    spark.stop()
+
+
+# entry point
+if __name__ == '__main__':
+    main()
