@@ -12,10 +12,16 @@
 # user input).
 #
 # A bootstrap step is a "step" like any other job step. It can take as
-# long as needed. It is run as the hadoop user and is run in the step
-# directory (e.g. /mnt/var/lib/hadoop/steps/).
+# long as needed. It is run as the hadoop user and is run in the step's
+# directory (e.g. /mnt/var/lib/hadoop/steps/s-123456789).
 #
 # Most of the time, it's best to user a bootstrap script and not step.
 
-# Do things here like install GCC, clone repos, build programs, etc.
-# sudo yum group install -y "Development Tools"
+#sudo yum groups mark convert
+#
+## check if GCC, make, etc. are installed already
+#DEVTOOLS=$(sudo yum grouplist | grep 'Development Tools')
+#
+#if [ -z "$DEVTOOLS" ]; then
+#    sudo yum groupinstall -y 'Development Tools'
+#fi

@@ -79,9 +79,12 @@ class $stage$(implicit context: Context) extends Stage {
     val phenotype = output
 
     // list of steps to execute for this job
-    Seq(
-      JobStep.PySpark(sampleSparkJob, phenotype),
-      JobStep.Script(sampleScript, phenotype)
+    val steps = Seq(
+      Job.PySpark(sampleSparkJob, phenotype),
+      Job.Script(sampleScript, phenotype)
     )
+
+    // create the job
+    new Job(steps)
   }
 }
