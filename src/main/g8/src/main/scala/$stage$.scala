@@ -64,7 +64,7 @@ class $stage$(implicit context: Context) extends Stage {
     * each other and can be executed in parallel across multiple, identical
     * clusters.
     */
-  override def make(output: String): Seq[JobStep] = {
+  override def make(output: String): Job = {
 
     /* All job steps require a URI to a location in S3 where the script can
      * be read from by the cluster.
