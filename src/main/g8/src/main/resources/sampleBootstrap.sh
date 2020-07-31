@@ -20,8 +20,8 @@
 #sudo yum groups mark convert
 #
 ## check if GCC, make, etc. are installed already
-#DEVTOOLS=$(sudo yum grouplist | grep 'Development Tools')
+#DEVTOOLS=\$(sudo yum grouplist | grep 'Development Tools')
 #
-#if [ -z "$DEVTOOLS" ]; then
+#if [ -z "\$DEVTOOLS" ]; then
 #    sudo yum groupinstall -y 'Development Tools'
 #fi
