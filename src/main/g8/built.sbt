@@ -1,5 +1,5 @@
 val Versions = new {
-  val Aggregator = "0.3.0-SNAPSHOT"
+  val Aggregator = "0.3.1-SNAPSHOT"
   val Scala = "2.13.2"
 }
 
